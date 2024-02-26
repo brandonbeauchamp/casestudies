@@ -147,11 +147,32 @@ view: order_items {
   measure: average_spend_per_customer {
     type: number
     sql: ${total_sale_price}/${count_users} ;;
+    value_format_name: usd_0
   }
   measure: total_revenue_yesterday {
     type: sum
     sql: ${sale_price} ;;
     filters: [created_date: "yesterday"]
+    value_format_name: decimal_2
+  }
+
+  dimension_group: days_since_user_created {
+    type: duration
+    intervals: [day]
+    sql_start: ${created_raw} ;;
+    sql_end: CURRENT_TIMESTAMP();;
+  }
+
+  dimension: is_new_customer_yesterday {
+    type: yesno
+    sql: ${days_days_since_user_created} = 1 ;;
+  }
+
+  measure: total_number_of_new_users_yesterday {
+    type: count_distinct
+    sql: ${is_new_customer_yesterday} ;;
+    filters: [is_new_customer_yesterday: "yes"]
+
   }
 
   # ----- Sets of fields for drilling ------
