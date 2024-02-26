@@ -66,9 +66,49 @@ view: order_items {
   measure: total_sale_price {
     type: sum
     sql: ${sale_price} ;;  }
+
   measure: average_sale_price {
     type: average
-    sql: ${sale_price} ;;  }
+    sql: ${sale_price} ;;
+    }
+
+    measure: total_gross_revenue {
+      type: sum
+      sql: ${sale_price} ;;
+      filters: [status: "Complete"]
+    }
+
+    measure: total_gross_margin_amount {
+      type: number
+      sql: ${total_gross_revenue} - ${inventory_items.total_cost} ;;
+    }
+
+    measure: avg_total_gross_margin_amount {
+      type: number
+      sql: ${total_gross_margin_amount}/${number_of_items_sold} ;;
+    }
+
+    measure: number_of_items_sold {
+      type: count
+      filters: [returned_date: "null"]
+    }
+
+    measure: gross_margin_percentatge {
+      type: number
+      sql: ${total_gross_margin_amount}/${total_gross_revenue} ;;
+      value_format_name: percent_2
+    }
+
+    measure: number_of_order_items_returned {
+      type: count
+      filters: [status: "Returned"]
+    }
+
+    measure: item_return_rate {
+      type: number
+      sql: ${number_of_order_items_returned}/${number_of_items_sold} ;;
+      value_format_name: percent_2
+    }
 
   dimension_group: shipped {
     type: time
@@ -83,7 +123,6 @@ view: order_items {
 
   dimension: user_id {
     type: number
-    # hidden: yes
     sql: ${TABLE}.user_id ;;
   }
   measure: count {
@@ -91,18 +130,42 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+  measure: count_users_returned_items {
+    type: count_distinct
+    sql: ${user_id} ;;
+    filters: [status: "Returned"]
+  }
+  measure: count_users {
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+  measure: percent_of_users_with_returns {
+    type: number
+    sql: ${count_users_returned_items}/${count_users} ;;
+    value_format_name: percent_2
+  }
+  measure: average_spend_per_customer {
+    type: number
+    sql: ${total_sale_price}/${count_users} ;;
+  }
+  measure: total_revenue_yesterday {
+    type: sum
+    sql: ${sale_price} ;;
+    filters: [created_date: "yesterday"]
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-	id,
-	users.last_name,
-	users.id,
-	users.first_name,
-	inventory_items.id,
-	inventory_items.product_name,
-	products.name,
-	products.id
-	]
+  id,
+  users.last_name,
+  users.id,
+  users.first_name,
+  inventory_items.id,
+  inventory_items.product_name,
+  products.name,
+  products.id
+  ]
   }
 
 }

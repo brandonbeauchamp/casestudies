@@ -29,6 +29,7 @@ view: users {
   measure: total_age {
     type: sum
     sql: ${age} ;;  }
+
   measure: average_age {
     type: average
     sql: ${age} ;;  }
@@ -101,6 +102,7 @@ view: users {
     type: string
     sql: ${TABLE}.traffic_source ;;
   }
+
   measure: count {
     type: count
     drill_fields: [id, last_name, first_name, events.count, order_items.count]
