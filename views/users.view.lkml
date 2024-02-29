@@ -1,30 +1,19 @@
-# The name of this view in Looker is "Users"
 view: users {
-  # The sql_table_name parameter indicates the underlying database table
-  # to be used for all fields in this view.
+
   sql_table_name: `thelook.users` ;;
   drill_fields: [id]
-
-  # This primary key is the unique key for this table in the underlying database.
-  # You need to define a primary key in a view in order to join to other views.
 
   dimension: id {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
-    # Here's what a typical dimension looks like in LookML.
-    # A dimension is a groupable field that can be used to filter query results.
-    # This dimension will be called "Age" in Explore.
 
   dimension: age {
+    description: "Age of the user"
     type: number
     sql: ${TABLE}.age ;;
   }
-
-  # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
-  # measures for this dimension, but you can also add measures of many different aggregates.
-  # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: total_age {
     type: sum
@@ -64,6 +53,7 @@ view: users {
   }
 
   dimension: gender {
+    description: "Gender of the user"
     type: string
     sql: ${TABLE}.gender ;;
   }
@@ -81,6 +71,13 @@ view: users {
   dimension: longitude {
     type: number
     sql: ${TABLE}.longitude ;;
+  }
+
+  dimension: location {
+    description: "The location of the user"
+    type: location
+    sql_longitude: ${longitude} ;;
+    sql_latitude: ${latitude} ;;
   }
 
   dimension: postal_code {
@@ -101,10 +98,64 @@ view: users {
   dimension: traffic_source {
     type: string
     sql: ${TABLE}.traffic_source ;;
+    drill_fields: [age_tier,gender]
+  }
+
+  dimension: age_tier {
+    type: tier
+    tiers: [15, 26, 36, 51, 66]
+    style: integer
+    sql: ${age} ;;
   }
 
   measure: count {
     type: count
-    drill_fields: [id, last_name, first_name, events.count, order_items.count]
+    drill_fields: [id, last_name, first_name]
   }
+
+  measure: count_new_users_yesterday {
+    description: "New users that were added yesterday"
+    type: count
+    filters: [created_date: "yesterday"]
+  }
+
+  dimension: last_month_end_date {
+    type: date_raw
+    sql: date_add(CURRENT_DATE(),INTERVAL -1 MONTH) ;;
+  }
+  dimension: extract_month_number{
+    type: string
+    sql: cast(extract(month FROM ${last_month_end_date}) as string);;
+  }
+  dimension: extract_year_number{
+    type: string
+    sql: cast(extract(year FROM ${last_month_end_date}) as string) ;;
+  }
+  dimension: last_month_start_date {
+    type: date_raw
+    sql: date(concat(${extract_year_number},'-',${extract_month_number},'-1')) ;;
+  }
+  dimension: in_last_month {
+    type: yesno
+    sql: ${created_date} >= ${last_month_start_date} and ${created_date} <= ${last_month_end_date} ;;
+  }
+  dimension: in_this_month {
+    type: yesno
+    sql: extract(month from ${created_date}) = extract(month from current_date) and extract(year from ${created_date}) = extract(year from current_date);;
+  }
+  measure: new_users_last_month {
+    description: "New users last month to date"
+    type: count_distinct
+    sql: ${id} ;;
+    filters: [in_last_month: "yes"]
+  }
+  measure: new_users_this_month {
+    description: "New users this month to date"
+    type: count_distinct
+    sql: ${id};;
+    filters: [created_date: "this month"]
+  }
+
+
+
 }

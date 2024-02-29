@@ -1,24 +1,17 @@
-# The name of this view in Looker is "Order Items"
 view: order_items {
-  # The sql_table_name parameter indicates the underlying database table
-  # to be used for all fields in this view.
+
   sql_table_name: `thelook.order_items` ;;
   drill_fields: [id]
-
-  # This primary key is the unique key for this table in the underlying database.
-  # You need to define a primary key in a view in order to join to other views.
 
   dimension: id {
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
-  # Dates and timestamps can be represented in Looker using a dimension group of type: time.
-  # Looker converts dates and timestamps to the specified timeframes within the dimension group.
 
   dimension_group: created {
     type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
+    timeframes: [raw, time, date, week, month, month_num, quarter, year]
     sql: ${TABLE}.created_at ;;
   }
 
@@ -27,9 +20,6 @@ view: order_items {
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.delivered_at ;;
   }
-    # Here's what a typical dimension looks like in LookML.
-    # A dimension is a groupable field that can be used to filter query results.
-    # This dimension will be called "Inventory Item ID" in Explore.
 
   dimension: inventory_item_id {
     type: number
@@ -64,23 +54,35 @@ view: order_items {
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
   measure: total_sale_price {
+    description: "Total sales from items sold"
     type: sum
-    sql: ${sale_price} ;;  }
+    sql: ${sale_price} ;;
+    value_format_name: usd_0
+    }
 
   measure: average_sale_price {
+    description: "Average sale price from items sold"
     type: average
     sql: ${sale_price} ;;
+    }
+
+    measure: running_total_sale_price {
+      type: running_total
+      sql: ${total_sale_price} ;;
     }
 
     measure: total_gross_revenue {
       type: sum
       sql: ${sale_price} ;;
-      filters: [status: "Complete"]
+      filters: [is_order_complete: "Yes"]
+      value_format_name: usd
     }
 
     measure: total_gross_margin_amount {
       type: number
       sql: ${total_gross_revenue} - ${inventory_items.total_cost} ;;
+      value_format_name: decimal_2
+      drill_fields: [products.brand, products.category]
     }
 
     measure: avg_total_gross_margin_amount {
@@ -94,8 +96,9 @@ view: order_items {
     }
 
     measure: gross_margin_percentatge {
+      description: "Total Gross Margin Amount / Total Gross Revenue"
       type: number
-      sql: ${total_gross_margin_amount}/${total_gross_revenue} ;;
+      sql: ${total_gross_margin_amount}/nullif(${total_gross_revenue},0)  ;;
       value_format_name: percent_2
     }
 
@@ -145,15 +148,17 @@ view: order_items {
     value_format_name: percent_2
   }
   measure: average_spend_per_customer {
+    description: "On average how much a customer will spend"
     type: number
     sql: ${total_sale_price}/${count_users} ;;
     value_format_name: usd_0
   }
   measure: total_revenue_yesterday {
+    description: "Yesterday's total revenue generated "
     type: sum
     sql: ${sale_price} ;;
     filters: [created_date: "yesterday"]
-    value_format_name: decimal_2
+    value_format_name: usd_0
   }
 
   dimension_group: days_since_user_created {
@@ -163,17 +168,27 @@ view: order_items {
     sql_end: CURRENT_TIMESTAMP();;
   }
 
+  dimension: is_new_customer {
+    description: "Flags a customer if they have signed up in the last 90 days"
+    type: yesno
+    sql: ${days_days_since_user_created} < 90 ;;
+  }
+
   dimension: is_new_customer_yesterday {
     type: yesno
     sql: ${days_days_since_user_created} = 1 ;;
   }
 
-  measure: total_number_of_new_users_yesterday {
-    type: count_distinct
-    sql: ${is_new_customer_yesterday} ;;
-    filters: [is_new_customer_yesterday: "yes"]
-
+  dimension: is_order_complete {
+    type: yesno
+    sql: ${status} not in ("Cancelled", "Returned") ;;
   }
+
+  # measure: total_number_of_new_users_yesterday {
+  #   type: count
+  #   sql: ${is_new_customer_yesterday} ;;
+  #   filters: [is_new_customer_yesterday: "yes"]
+  # }
 
   # ----- Sets of fields for drilling ------
   set: detail {
