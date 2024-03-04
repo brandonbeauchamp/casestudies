@@ -161,6 +161,21 @@ view: order_items {
     value_format_name: usd_0
   }
 
+  measure: count_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: first_order_date {
+    type: date
+    sql: MIN(${created_raw}) ;;
+  }
+
+  measure: last_order_date {
+    type: date
+    sql: MAX(${created_raw}) ;;
+  }
+
   dimension_group: days_since_user_created {
     type: duration
     intervals: [day]
