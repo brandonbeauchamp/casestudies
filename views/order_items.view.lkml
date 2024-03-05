@@ -176,23 +176,23 @@ view: order_items {
     sql: MAX(${created_raw}) ;;
   }
 
-  dimension_group: days_since_user_created {
-    type: duration
-    intervals: [day]
-    sql_start: ${created_raw} ;;
-    sql_end: CURRENT_TIMESTAMP();;
-  }
+  # dimension_group: days_since_user_created_first_order {
+  #   type: duration
+  #   intervals: [day]
+  #   sql_start: ${first_order_date} ;;
+  #   sql_end: CURRENT_DATE;;
+  # }
 
-  dimension: is_new_customer {
-    description: "Flags a customer if they have signed up in the last 90 days"
-    type: yesno
-    sql: ${days_days_since_user_created} < 90 ;;
-  }
+  # dimension: is_new_customer {
+  #   description: "Flags a customer if they have signed up in the last 90 days"
+  #   type: yesno
+  #   sql: ${days_days_since_user_created_first_order} < 90 ;;
+  # }
 
-  dimension: is_new_customer_yesterday {
-    type: yesno
-    sql: ${days_days_since_user_created} = 1 ;;
-  }
+  # dimension: is_new_customer_yesterday {
+  #   type: yesno
+  #   sql: ${days_days_since_user_created_first_order} = 1 ;;
+  # }
 
   dimension: is_order_complete {
     type: yesno
@@ -203,6 +203,17 @@ view: order_items {
   #   type: count
   #   sql: ${is_new_customer_yesterday} ;;
   #   filters: [is_new_customer_yesterday: "yes"]
+  # }
+
+  # measure: count_of_items_bought_by_repeat_customer {
+  #   type: count
+  #   filters: [per_user_data.is_repeat_customer: "yes"]
+  # }
+
+  # measure: repeat_purchase_rate {
+  #   type: number
+  #   sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
+  #   value_format_name: percent_2
   # }
 
   # ----- Sets of fields for drilling ------

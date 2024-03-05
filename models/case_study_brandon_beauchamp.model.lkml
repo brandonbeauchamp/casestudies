@@ -47,6 +47,13 @@ explore: order_items {
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
+
+  join: per_user_data {
+    type: left_outer
+    sql_on: ${order_items.user_id} = ${per_user_data.user_id} ;;
+    relationship: many_to_one
+  }
+
 }
 
 explore: order_items_test {}
@@ -80,3 +87,5 @@ explore: inventory_items {
     relationship: one_to_many
   }
 }
+
+  explore: per_user_data {}
