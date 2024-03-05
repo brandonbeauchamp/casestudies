@@ -54,11 +54,11 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  join: cross_view {
-    type: left_outer
-    sql_on: ${cross_view.id} = ${order_items.id} ;;
-    relationship: one_to_one
-  }
+  # join: cross_view {
+  #   type: left_outer
+  #   sql_on: ${cross_view.id} = ${order_items.id} ;;
+  #   relationship: one_to_one
+  # }
 
 }
 
@@ -74,24 +74,30 @@ explore: products {
   }
 }
 
-explore: inventory_items {
-  join: products {
-    type: left_outer
-    sql_on: ${inventory_items.product_id} = ${products.id} ;;
-    relationship: many_to_one
-  }
+# explore: inventory_items {
+#   join: products {
+#     type: left_outer
+#     sql_on: ${inventory_items.product_id} = ${products.id} ;;
+#     relationship: many_to_one
+#   }
 
-  join: distribution_centers {
-    type: left_outer
-    sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
-    relationship: many_to_one
-  }
+#   join: distribution_centers {
+#     type: left_outer
+#     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
+#     relationship: many_to_one
+#   }
 
-  join: order_items {
-    type: left_outer
-    sql_on: ${inventory_items.id} = ${order_items.inventory_item_id} ;;
-    relationship: one_to_many
-  }
-}
+#   join: order_items {
+#     type: left_outer
+#     sql_on: ${inventory_items.id} = ${order_items.inventory_item_id} ;;
+#     relationship: one_to_many
+#   }
+# }
 
-  explore: per_user_data {}
+  explore: per_user_data {
+    # join: order_items {
+    #   type: left_outer
+    #   sql_on: ${per_user_data.user_id} = ${order_items.user_id} ;;
+    #   relationship: one_to_many
+    # }
+  }

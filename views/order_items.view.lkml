@@ -205,16 +205,16 @@ view: order_items {
   #   filters: [is_new_customer_yesterday: "yes"]
   # }
 
-  # measure: count_of_items_bought_by_repeat_customer {
-  #   type: count
-  #   filters: [per_user_data.is_repeat_customer: "yes"]
-  # }
+  measure: count_of_items_bought_by_repeat_customer {
+    type: count
+    filters: [per_user_data.is_repeat_customer: "yes"]
+  }
 
-  # measure: repeat_purchase_rate {
-  #   type: number
-  #   sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
-  #   value_format_name: percent_2
-  # }
+  measure: repeat_purchase_rate {
+    type: number
+    sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
+    value_format_name: percent_2
+  }
 
   # ----- Sets of fields for drilling ------
   set: detail {
