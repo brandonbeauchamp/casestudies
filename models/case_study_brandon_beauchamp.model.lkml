@@ -54,6 +54,12 @@ explore: order_items {
     relationship: many_to_one
   }
 
+  join: cross_view {
+    type: left_outer
+    sql_on: ${cross_view.id} = ${order_items.id} ;;
+    relationship: one_to_one
+  }
+
 }
 
 explore: order_items_test {}
