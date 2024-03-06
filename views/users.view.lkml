@@ -156,6 +156,31 @@ view: users {
     filters: [created_date: "this month"]
   }
 
+  dimension: days_since_user_sign_up {
+    type: duration_day
+    sql_start: ${created_raw} ;;
+    sql_end: CURRENT_TIMESTAMP ;;
+  }
+
+  dimension: months_since_user_signed_up {
+    type: duration_month
+    sql_start: ${created_raw} ;;
+    sql_end: CURRENT_TIMESTAMP ;;
+  }
+
+  dimension: is_prior_month {
+    type: yesno
+    sql: ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 1 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), Month);;
+}
+
+  dimension: is_prior_year {
+    type: yesno
+    sql: ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR);;
+  }
+
+
 
 
 }

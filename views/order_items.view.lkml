@@ -216,6 +216,8 @@ view: order_items {
     value_format_name: percent_2
   }
 
+
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
