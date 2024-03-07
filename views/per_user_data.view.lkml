@@ -35,8 +35,8 @@ view: per_user_data {
     dimension: customer_lifetime_orders {
       type: string
       sql: CASE
-      When ${count_orders} = 1 then "1 time customer"
-      When ${count_orders} = 2 then "2 time customer"
+      When ${count_orders} = 1 then "1 Time Customer"
+      When ${count_orders} = 2 then "2 Time Customer"
       When ${count_orders} BETWEEN 3 and 5 then "Multi-time customer"
       When ${count_orders} > 6 then "Loyal customer"
       else "No time customer" end ;;
