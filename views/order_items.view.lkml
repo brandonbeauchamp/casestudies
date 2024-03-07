@@ -176,34 +176,12 @@ view: order_items {
     sql: MAX(${created_raw}) ;;
   }
 
-  # dimension_group: days_since_user_created_first_order {
-  #   type: duration
-  #   intervals: [day]
-  #   sql_start: ${first_order_date} ;;
-  #   sql_end: CURRENT_DATE;;
-  # }
-
-  # dimension: is_new_customer {
-  #   description: "Flags a customer if they have signed up in the last 90 days"
-  #   type: yesno
-  #   sql: ${days_days_since_user_created_first_order} < 90 ;;
-  # }
-
-  # dimension: is_new_customer_yesterday {
-  #   type: yesno
-  #   sql: ${days_days_since_user_created_first_order} = 1 ;;
-  # }
 
   dimension: is_order_complete {
     type: yesno
     sql: ${status} not in ("Cancelled", "Returned") ;;
   }
 
-  # measure: total_number_of_new_users_yesterday {
-  #   type: count
-  #   sql: ${is_new_customer_yesterday} ;;
-  #   filters: [is_new_customer_yesterday: "yes"]
-  # }
 
   measure: count_of_items_bought_by_repeat_customer {
     type: count
@@ -212,6 +190,8 @@ view: order_items {
 
   measure: repeat_purchase_rate {
     type: number
+    label: "Repeat Purchase Rate"
+    description: "Count of items bought by repeat customer / all items from all customers"
     sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
     value_format_name: percent_2
   }
