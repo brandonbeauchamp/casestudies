@@ -180,6 +180,71 @@ view: users {
       DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR);;
   }
 
+  parameter: months_ago_category {
+    type: unquoted
+    default_value: " "
+    allowed_value: {
+      label: "One Month Ago"
+      value: "onemonth"
+    }
+    allowed_value: {
+      label: "Two Months Ago"
+      value: "twomonth"
+    }
+    allowed_value: {
+      label: "Three Months Ago"
+      value: "threemonth"
+    }
+    allowed_value: {
+      label: "Four Months Ago "
+      value: "fourmonth"
+    }
+    allowed_value: {
+      label: "Five Months Ago "
+      value: "fivemonth"
+    }
+    allowed_value: {
+      label: "Six Months Ago "
+      value: "sixmonth"
+    }
+    allowed_value: {
+      label: "Seven Months Ago "
+      value: "sevenmonth"
+    }
+    allowed_value: {
+      label: "Eight Months Ago "
+      value: "eightmonth"
+    }
+    allowed_value: {
+      label: "Nine Months Ago "
+      value: "ninemonth"
+    }
+    allowed_value: {
+      label: "Ten Months Ago "
+      value: "tenmonth"
+    }
+    allowed_value: {
+      label: "Eleven Months Ago "
+      value: "elevenmonth"
+    }
+  }
+
+
+  dimension: dynamic_months_ago_category {
+    type: string
+    sql:
+
+          {% if months_ago_category._parameter_value == "onemonth" %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 1 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), Month)
+          {% else %}
+                   ${per_user_data.customer_lifetime_orders}
+          {% endif %}
+    ;;
+  }
+
+
+###   {% elsif customer_category._parameter_value == 'country' %} ${users.country}
   # dimension: prior_month {
   #   type: date
   #   sql: ${created_date} BETWEEN

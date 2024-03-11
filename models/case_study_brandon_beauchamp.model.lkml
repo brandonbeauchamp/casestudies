@@ -15,13 +15,13 @@ persist_with: case_study_brandon_beauchamp_default_datagroup
 
 explore: distribution_centers {}
 
-explore: events {
-  join: users {
-    type: left_outer
-    sql_on: ${events.user_id} = ${users.id} ;;
-    relationship: many_to_one
-  }
-}
+# explore: events {
+#   join: users {
+#     type: left_outer
+#     sql_on: ${events.user_id} = ${users.id} ;;
+#     relationship: many_to_one
+#   }
+# }
 
 explore: order_items {
   join: users {
@@ -64,7 +64,7 @@ explore: order_items {
 
 explore: order_items_test {}
 
-explore: users {}
+# explore: users {}
 
 explore: products {
   join: distribution_centers {

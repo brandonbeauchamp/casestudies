@@ -197,12 +197,8 @@ view: order_items {
   }
 
   parameter: customer_category {
-    type: string
+    type: unquoted
     default_value: " "
-    allowed_value: {
-      label: "Age"
-      value: "age"
-    }
     allowed_value: {
       label: "Gender"
       value: "gender"
@@ -226,10 +222,8 @@ view: order_items {
     type: string
     sql:
 
-          {% if customer_category._parameter_value == 'age' %}
-                  ${users.age_tier}
-          {% elsif customer_category._parameter_value == 'gender' %}
-                   ${users.gender}
+          {% if customer_category._parameter_value == 'gender' %}
+                  ${users.gender}
           {% elsif customer_category._parameter_value == 'country' %}
                    ${users.country}
           {% elsif customer_category._parameter_value == 'revenuetier' %}
