@@ -180,6 +180,18 @@ view: users {
       DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR);;
   }
 
+  # dimension: prior_month {
+  #   type: date
+  #   sql: ${created_date} BETWEEN
+  #     DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 1 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), Month) ;;
+  # }
+
+  # dimension: prior_year {
+  #   type: date
+  #   sql: ${created_date} BETWEEN
+  #     DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR) ;;
+  # }
+
 
 
 

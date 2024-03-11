@@ -196,6 +196,51 @@ view: order_items {
     value_format_name: percent_2
   }
 
+  parameter: customer_category {
+    type: string
+    default_value: " "
+    allowed_value: {
+      label: "Age"
+      value: "age"
+    }
+    allowed_value: {
+      label: "Gender"
+      value: "gender"
+    }
+    allowed_value: {
+      label: "Country"
+      value: "country"
+    }
+    allowed_value: {
+      label: "Revenue Tier"
+      value: "revenuetier"
+    }
+    allowed_value: {
+      label: "Order Count Tier"
+      value: "ordercounttier"
+    }
+  }
+
+
+  dimension: dynamic_customer_category {
+    type: string
+    sql:
+
+          {% if customer_category._parameter_value == 'age' %}
+                  ${users.age_tier}
+          {% elsif customer_category._parameter_value == 'gender' %}
+                   ${users.gender}
+          {% elsif customer_category._parameter_value == 'country' %}
+                   ${users.country}
+          {% elsif customer_category._parameter_value == 'revenuetier' %}
+                   ${per_user_data.customer_lifetime_revenue}
+          {% else %}
+                   ${per_user_data.customer_lifetime_orders}
+          {% endif %}
+    ;;
+  }
+
+
 
 
   # ----- Sets of fields for drilling ------
