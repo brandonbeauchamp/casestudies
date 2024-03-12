@@ -237,8 +237,36 @@ view: users {
           {% if months_ago_category._parameter_value == "onemonth" %}
                   ${created_date} BETWEEN
       DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 1 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'twomonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 2 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 2 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'threemonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 3 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 3 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'fourmonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 4 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 4 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'fivemonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 5 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 5 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'sixmonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 6 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 6 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'sevenmonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 7 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 7 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'eightmonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 8 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 8 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'ninemonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 9 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 9 MONTH), Month)
+          {% elsif months_ago_category._parameter_value == 'tenmonth' %}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 10 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 10 MONTH), Month)
           {% else %}
-                   ${per_user_data.customer_lifetime_orders}
+                  ${created_date} BETWEEN
+      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 11 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 11 MONTH), Month)
           {% endif %}
     ;;
   }
