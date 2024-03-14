@@ -234,7 +234,7 @@ view: order_items {
     ;;
   }
 
-
+### If the parameter value is selected to gender, by the end user, then the dimension in the tile will switch to Gender.
 
 
   # ----- Sets of fields for drilling ------
