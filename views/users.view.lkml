@@ -63,6 +63,11 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
+  dimension: full_name {
+    type: string
+    sql: CONCAT(${first_name}, " ", ${last_name}) ;;
+  }
+
   dimension: latitude {
     type: number
     sql: ${TABLE}.latitude ;;
@@ -174,11 +179,11 @@ view: users {
       DATE_SUB(DATE_TRUNC( CURRENT_DATE(), month), INTERVAL 1 MONTH) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH), Month);;
 }
 
-  dimension: is_prior_year {
-    type: yesno
-    sql: ${created_date} BETWEEN
-      DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR);;
-  }
+  # dimension: is_prior_year {
+  #   type: yesno
+  #   sql: ${created_date} BETWEEN
+  #     DATE_SUB(DATE_TRUNC( CURRENT_DATE(), year), INTERVAL 1 YEAR) AND LAST_DAY(DATE_SUB(CURRENT_DATE(), INTERVAL 1 YEAR), YEAR);;
+  # }
 
   parameter: months_ago_category {
     type: unquoted
@@ -271,6 +276,76 @@ view: users {
     ;;
   }
 
+  parameter: date_granularity {
+    type: unquoted
+    allowed_value: {
+      label: "Day"
+      value: "day"
+    }
+    allowed_value: {
+      label: "Month"
+      value: "month"
+    }
+    allowed_value: {
+      label: "Year"
+      value: "year"
+    }
+  }
+
+
+  dimension: dynamic_date {
+    type: string
+    label_from_parameter: date_granularity
+    sql:
+
+          {% if date_granularity._parameter_value == 'day' %}
+                  ${created_date}
+          {% elsif date_granularity._parameter_value == 'month' %}
+                   ${created_month}
+          {% elsif date_granularity._parameter_value == 'year' %}
+                   ${created_year}
+          {% else %}
+                   ${created_date}
+          {% endif %}
+    ;;
+  }
+
+  dimension: dynamic_days_since_sign_up{
+    type: number
+    label_from_parameter: date_granularity
+    sql:
+
+          {% if date_granularity._parameter_value == 'day' %}
+                   ${since_signup_days}
+          {% elsif date_granularity._parameter_value == 'month' %}
+                  ${since_signup_months}
+          {% elsif date_granularity._parameter_value == 'year' %}
+                  ${since_signup_years}
+          {% else %}
+                 ${since_signup_days}
+          {% endif %}
+    ;;
+  }
+
+  dimension: since_signup_days {
+    type: number
+    sql: date_diff(date(current_timestamp()),date(${created_date}), day);;
+  }
+
+  dimension: since_signup_months {
+    type: number
+    sql: date_diff(date(current_timestamp()),date(${created_date}), month);;
+  }
+
+  dimension: since_signup_years {
+    type: number
+    sql: date_diff(date(current_timestamp()),date(${created_date}), year);;
+  }
+
+  measure: count_distict_user_id {
+    type: count_distinct
+    sql: ${id} ;;
+  }
 
 ###   {% elsif customer_category._parameter_value == 'country' %} ${users.country}
   # dimension: prior_month {

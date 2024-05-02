@@ -24,6 +24,7 @@ explore: distribution_centers {}
 # }
 
 explore: order_items {
+
   # access_filter: {
   #   field: users.country
   #   user_attribute: brandon_use_case_attribute

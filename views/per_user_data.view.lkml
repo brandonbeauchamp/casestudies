@@ -73,13 +73,13 @@ view: per_user_data {
     sql: ${count_orders} ;;
   }
 
-  measure: average_lifetime_revenue {
-    label: "Average Lifetime Revenue"
-    description: "Averages the total amount of money all customers have spent"
-    type: average
-    sql: ${total_sale_price} ;;
-    value_format_name: usd_0
-  }
+  # measure: average_lifetime_revenue {
+  #   label: "Average Lifetime Revenue"
+  #   description: "Averages the total amount of money all customers have spent"
+  #   type: average
+  #   sql: ${total_sale_price} ;;
+  #   value_format_name: usd_0
+  # }
 
   measure: aveerage_lifetime_orders {
     label: "Average Lifetime Orders"
