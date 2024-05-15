@@ -24,12 +24,7 @@ explore: distribution_centers {}
 # }
 
 explore: order_items {
-
-  # access_filter: {
-  #   field: users.country
-  #   user_attribute: brandon_use_case_attribute
-  # }
-
+  label: "Main Explore"
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;
