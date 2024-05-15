@@ -190,56 +190,56 @@ view: order_items {
   }
 
 
-  measure: count_of_items_bought_by_repeat_customer {
-    type: count
-    filters: [per_user_data.is_repeat_customer: "yes"]
-  }
+  # measure: count_of_items_bought_by_repeat_customer {
+  #   type: count
+  #   filters: [per_user_data.is_repeat_customer: "yes"]
+  # }
 
-  measure: repeat_purchase_rate {
-    type: number
-    label: "Repeat Purchase Rate"
-    description: "Count of items bought by repeat customer / all items from all customers"
-    sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
-    value_format_name: percent_2
-  }
+  # measure: repeat_purchase_rate {
+  #   type: number
+  #   label: "Repeat Purchase Rate"
+  #   description: "Count of items bought by repeat customer / all items from all customers"
+  #   sql: ${count_of_items_bought_by_repeat_customer}/nullif(${count},0) ;;
+  #   value_format_name: percent_2
+  # }
 
-  parameter: customer_category {
-    type: unquoted
-    default_value: " "
-    allowed_value: {
-      label: "Gender"
-      value: "gender"
-    }
-    allowed_value: {
-      label: "Country"
-      value: "country"
-    }
-    allowed_value: {
-      label: "Revenue Tier"
-      value: "revenuetier"
-    }
-    allowed_value: {
-      label: "Order Count Tier"
-      value: "ordercounttier"
-    }
-  }
+  # parameter: customer_category {
+  #   type: unquoted
+  #   default_value: " "
+  #   allowed_value: {
+  #     label: "Gender"
+  #     value: "gender"
+  #   }
+  #   allowed_value: {
+  #     label: "Country"
+  #     value: "country"
+  #   }
+  #   allowed_value: {
+  #     label: "Revenue Tier"
+  #     value: "revenuetier"
+  #   }
+  #   allowed_value: {
+  #     label: "Order Count Tier"
+  #     value: "ordercounttier"
+  #   }
+  # }
 
 
-  dimension: dynamic_customer_category {
-    type: string
-    sql:
+  # dimension: dynamic_customer_category {
+  #   type: string
+  #   sql:
 
-          {% if customer_category._parameter_value == 'gender' %}
-                  ${users.gender}
-          {% elsif customer_category._parameter_value == 'country' %}
-                   ${users.country}
-          {% elsif customer_category._parameter_value == 'revenuetier' %}
-                   ${per_user_data.customer_lifetime_revenue}
-          {% else %}
-                   ${per_user_data.customer_lifetime_orders}
-          {% endif %}
-    ;;
-  }
+  #         {% if customer_category._parameter_value == 'gender' %}
+  #                 ${users.gender}
+  #         {% elsif customer_category._parameter_value == 'country' %}
+  #                 ${users.country}
+  #         {% elsif customer_category._parameter_value == 'revenuetier' %}
+  #                 ${per_user_data.customer_lifetime_revenue}
+  #         {% else %}
+  #                 ${per_user_data.customer_lifetime_orders}
+  #         {% endif %}
+  #   ;;
+  # }
 
 ### If the parameter value is selected to gender, by the end user, then the dimension in the tile will switch to Gender.
 
