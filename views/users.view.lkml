@@ -15,14 +15,6 @@ view: users {
     sql: ${TABLE}.age ;;
   }
 
-  measure: total_age {
-    type: sum
-    sql: ${age} ;;  }
-
-  measure: average_age {
-    type: average
-    sql: ${age} ;;  }
-
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
@@ -63,11 +55,6 @@ view: users {
     sql: ${TABLE}.last_name ;;
   }
 
-  dimension: full_name {
-    type: string
-    sql: CONCAT(${first_name}, " ", ${last_name}) ;;
-  }
-
   dimension: latitude {
     type: number
     sql: ${TABLE}.latitude ;;
@@ -106,6 +93,13 @@ view: users {
     drill_fields: [age_tier,gender]
   }
 
+  measure: count {
+    type: count
+    drill_fields: [id, last_name, first_name]
+  }
+
+  #####################.           AUTO GENERATED BUSINESS LOGIC ABOVE ^^.    #############
+
   dimension: age_tier {
     type: tier
     tiers: [15, 26, 36, 51, 66]
@@ -113,10 +107,13 @@ view: users {
     sql: ${age} ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [id, last_name, first_name]
-  }
+  measure: total_age {
+    type: sum
+    sql: ${age} ;;  }
+
+  measure: average_age {
+    type: average
+    sql: ${age} ;;  }
 
   measure: count_new_users_yesterday {
     description: "New users that were added yesterday"

@@ -14,19 +14,6 @@ view: inventory_items {
     sql: ${TABLE}.cost ;;
   }
 
-
-  measure: total_cost {
-    type: sum
-    sql: ${cost} ;;
-    filters: [order_items.is_order_complete: "Yes"]
-    }
-
-  measure: average_cost {
-    type: average
-    sql: ${cost} ;;
-    filters: [order_items.is_order_complete: "Yes"]
-    }
-
   dimension_group: created {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
@@ -82,5 +69,19 @@ view: inventory_items {
   measure: count {
     type: count
     drill_fields: [id, product_name, products.name, products.id, order_items.count]
+  }
+
+  #####################.           AUTO GENERATED BUSINESS LOGIC ABOVE ^^.    #############
+
+  measure: total_cost {
+    type: sum
+    sql: ${cost} ;;
+    filters: [order_items.is_order_complete: "Yes"]
+  }
+
+  measure: average_cost {
+    type: average
+    sql: ${cost} ;;
+    filters: [order_items.is_order_complete: "Yes"]
   }
 }

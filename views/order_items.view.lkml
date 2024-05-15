@@ -66,6 +66,14 @@ view: order_items {
     sql: ${TABLE}.user_id ;;
   }
 
+  measure: count {
+    type: count
+  }
+
+
+ #####################.           AUTO GENERATED BUSINESS LOGIC ABOVE ^^.    #############
+
+
   # A measure is a field that uses a SQL aggregate function. Here are defined sum and average
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
@@ -131,16 +139,17 @@ view: order_items {
 
     }
 
-  measure: count {
-    type: count
-    drill_fields: [detail*]
-  }
-
   measure: count_users_returned_items {
     type: count_distinct
     sql: ${user_id} ;;
     filters: [status: "Returned"]
   }
+
+  measure: count_orders {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
   measure: count_users {
     type: count_distinct
     sql: ${user_id} ;;
@@ -162,11 +171,6 @@ view: order_items {
     sql: ${sale_price} ;;
     filters: [created_date: "yesterday"]
     value_format_name: usd_0
-  }
-
-  measure: count_orders {
-    type: count_distinct
-    sql: ${order_id} ;;
   }
 
   measure: first_order_date {
