@@ -93,17 +93,14 @@ view: users {
     drill_fields: [age_tier,gender]
   }
 
-  dimension: full_name {
-    type: string
-    sql: CONCAT(${first_name}, "", ${last_name}) ;;
-  }
-
   measure: count {
     type: count
     drill_fields: [id, last_name, first_name]
   }
 
   #####################.           AUTO GENERATED BUSINESS LOGIC ABOVE ^^.    #############
+
+
 
   dimension: age_tier {
     type: tier

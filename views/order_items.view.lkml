@@ -78,22 +78,12 @@ view: order_items {
   # measures for this dimension, but you can also add measures of many different aggregates.
   # Click on the type parameter to see all the options in the Quick Help panel on the right.
 
-  measure: total_sale_price {
-    description: "Total sales from items sold"
-    type: sum
-    sql: ${sale_price} ;;
-    value_format_name: usd_0
-    }
+
 
   measure: average_sale_price {
     description: "Average sale price from items sold"
     type: average
     sql: ${sale_price} ;;
-    }
-
-    measure: running_total_sale_price {
-      type: running_total
-      sql: ${total_sale_price} ;;
     }
 
     measure: total_gross_revenue {
@@ -103,28 +93,9 @@ view: order_items {
       value_format_name: usd
     }
 
-    measure: total_gross_margin_amount {
-      type: number
-      sql: ${total_gross_revenue} - ${inventory_items.total_cost} ;;
-      value_format_name: decimal_2
-      drill_fields: [products.brand, products.category]
-    }
-
-    measure: avg_total_gross_margin_amount {
-      type: number
-      sql: ${total_gross_margin_amount}/${number_of_items_sold} ;;
-    }
-
     measure: number_of_items_sold {
       type: count
       filters: [returned_date: "null"]
-    }
-
-    measure: gross_margin_percentatge {
-      description: "Total Gross Margin Amount / Total Gross Revenue"
-      type: number
-      sql: ${total_gross_margin_amount}/nullif(${total_gross_revenue},0)  ;;
-      value_format_name: percent_2
     }
 
     measure: number_of_order_items_returned {
@@ -145,11 +116,6 @@ view: order_items {
     filters: [status: "Returned"]
   }
 
-  measure: count_orders {
-    type: count_distinct
-    sql: ${order_id} ;;
-  }
-
   measure: count_users {
     type: count_distinct
     sql: ${user_id} ;;
@@ -159,12 +125,7 @@ view: order_items {
     sql: ${count_users_returned_items}/${count_users} ;;
     value_format_name: percent_2
   }
-  measure: average_spend_per_customer {
-    description: "On average how much a customer will spend"
-    type: number
-    sql: ${total_sale_price}/${count_users} ;;
-    value_format_name: usd_0
-  }
+
   measure: total_revenue_yesterday {
     description: "Yesterday's total revenue generated "
     type: sum
