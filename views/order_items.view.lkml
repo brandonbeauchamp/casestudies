@@ -69,4 +69,9 @@ view: order_items {
     type: count
   }
 
+  measure: total_sale_price {
+    type: sum
+    sql: ${sale_price} ;;
+  }
+
 }
